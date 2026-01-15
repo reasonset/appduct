@@ -1,4 +1,5 @@
 defmodule Appduct.Db.Reaction do
+  
   def write(params, tkey) do
     with true <- check_barrage(tkey) do
       create(params)
@@ -28,15 +29,14 @@ defmodule Appduct.Db.Reaction do
         nil -> 0
         v -> v
       end
-
-    IO.inspect(current)
     CubDB.put(db, tkey, now)
 
-    now - current > 30
+    IO.puts bwin()
+    now - current > bwin()
   end
 
   defp create(params) do
-    dir = Path.join(["db", "reaction", params["user_id"], params["media_id"]])
+    dir = Path.join([dbdir(), "reaction", params["user_id"], params["media_id"]])
     fileprefix = if params["negative"], do: "-", else: ""
 
     filename =
@@ -66,5 +66,13 @@ defmodule Appduct.Db.Reaction do
 
         CubDB.put(db, key, current + 1)
     end
+  end
+  
+  defp dbdir do
+    Application.get_env(:appduct, :db_dir)    
+  end
+  
+  defp bwin do
+    Application.get_env(:appduct, :barrage_window)
   end
 end

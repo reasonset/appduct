@@ -1,13 +1,12 @@
 defmodule Appduct.Db.Countdb do
   use GenServer
-  @db_path "db/count"
 
   def start_link(_opts) do
     GenServer.start_link(__MODULE__, :ok, name: __MODULE__)
   end
 
   def init(:ok) do
-    {:ok, db} = CubDB.start_link(data_dir: @db_path)
+    {:ok, db} = CubDB.start_link(data_dir: db_path())
     {:ok, db}
   end
 
@@ -16,4 +15,8 @@ defmodule Appduct.Db.Countdb do
   end
 
   def handle_call(:get_db, _from, db), do: {:reply, db, db}
+  
+  defp db_path do
+    "#{Application.get_env(:appduct, :db_dir)}/count"
+  end
 end

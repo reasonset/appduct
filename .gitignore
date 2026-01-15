@@ -25,4 +25,6 @@ appduct-*.tar
 /.fetch
 *.beam
 /config/*.secret.exs
+/config/runtime.exs
 .elixir_ls/
+/db
